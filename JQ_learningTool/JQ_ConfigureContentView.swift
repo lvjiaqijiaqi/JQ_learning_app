@@ -31,7 +31,7 @@ struct JQ_ConfigureContentView: View {
                     }
                 }
                 
-                Section(header: Text("标签详情")) {
+                Section(header: Text("标签情")) {
                     ForEach(allTags) { tag in
                         NavigationLink(destination: TagDetailView(tag: tag)) {
                             TagRowView(tag: tag)
@@ -101,9 +101,19 @@ struct TagDetailView: View {
                     NavigationLink(destination: JQ_NoteDetailView(note: note)) {
                         VStack(alignment: .leading) {
                             Text(note.title)
-                            Text("学习次数: \(note.studyCount) | 熟练度: \(note.level)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                            HStack {
+                                Text("学习次数: \(note.studyCount)")
+                                Spacer()
+                                Text(note.levelText)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(note.levelColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(4)
+                            }
+                            Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                         }
                     }
                 }
@@ -120,5 +130,11 @@ struct TagDetailView: View {
         guard !tag.notes.isEmpty else { return 0 }
         let totalLevel = tag.notes.reduce(0) { $0 + $1.level }
         return Double(totalLevel) / Double(tag.notes.count)
+    }
+    
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return formatter.string(from: date)
     }
 }

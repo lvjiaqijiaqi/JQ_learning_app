@@ -22,8 +22,14 @@ struct JQ_AddNoteView: View {
                         .frame(minHeight: 200)
                 }
                 
-                Section(header: Text("熟练度等级")) {
-                    Stepper("Level: \(level)", value: $level, in: 0...3)
+                Section(header: Text("熟练度")) {
+                    Picker("熟练度", selection: $level) {
+                        Text("初学").tag(0)
+                        Text("了解").tag(1)
+                        Text("熟练").tag(2)
+                        Text("精通").tag(3)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                 }
                 
                 Section(header: Text("标签")) {

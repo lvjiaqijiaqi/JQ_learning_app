@@ -36,6 +36,7 @@ final class JQ_Note {
     var content: String
     @Relationship(inverse: \JQ_Tag.notes) var tags: [JQ_Tag]
     var creationDate: Date
+    var lastCheckInDate: Date // 新增字段
     var level: Int // 熟练度等级，范围 0-23
     var studyCount: Int
     
@@ -44,8 +45,29 @@ final class JQ_Note {
         self.content = content
         self.tags = []
         self.creationDate = Date()
+        self.lastCheckInDate = Date() // 初始化为创建时间
         self.level = max(0, min(3, level)) // 确保 level 在 0-23 范围内
         self.studyCount = 0
+    }
+    
+    var levelText: String {
+        switch level {
+        case 0: return "初学"
+        case 1: return "了解"
+        case 2: return "熟练"
+        case 3: return "精通"
+        default: return "未知"
+        }
+    }
+    
+    var levelColor: Color {
+        switch level {
+        case 0: return .gray
+        case 1: return .red
+        case 2: return .yellow
+        case 3: return .green
+        default: return .gray
+        }
     }
 }
 

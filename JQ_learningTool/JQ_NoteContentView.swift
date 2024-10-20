@@ -70,11 +70,11 @@ struct JQ_NoteContentView: View {
                 Text(note.title)
                     .font(.headline)
                 Spacer()
-                Text("Level \(note.level)")
+                Text(note.levelText)
                     .font(.caption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(levelColor(for: note.level))
+                    .background(note.levelColor)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
@@ -94,15 +94,21 @@ struct JQ_NoteContentView: View {
             }
             HStack {
                 Image(systemName: "calendar")
-                Text(note.creationDate, style: .date)
+                Text("创建: \(formattedDate(note.creationDate))")
                 Spacer()
-                Image(systemName: "book.fill")
-                Text("学习次数: \(note.studyCount)")
+                Image(systemName: "checkmark.circle")
+                Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
             }
             .font(.caption)
             .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
+    }
+    
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return formatter.string(from: date)
     }
     
     private var filterSortView: some View {

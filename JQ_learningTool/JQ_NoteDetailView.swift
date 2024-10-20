@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct JQ_NoteDetailView: View {
+    
     @Environment(\.modelContext) private var modelContext
     @Bindable var note: JQ_Note
     
@@ -30,45 +31,17 @@ struct JQ_NoteDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(isEditing ? "编辑笔记" : note.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button(action: checkIn) {
-                        Image(systemName: "checkmark.circle")
+                Button(action: {
+                    if isEditing {
+                        saveChanges()
                     }
-                    Button(action: {
-                        if isEditing {
-                            saveChanges()
-                        }
-                        isEditing.toggle()
-                    }) {
-                        Text(isEditing ? "保存" : "编辑")
-                    }
+                    isEditing.toggle()
+                }) {
+                    Text(isEditing ? "保存" : "编辑")
                 }
             }
-        }
-    }
-    
-    private var editingView: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            TextField("标题", text: $editedTitle)
-                .font(.title)
-            
-            TextEditor(text: $editedContent)
-                .frame(minHeight: 200)
-                .padding(8)
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-            
-            Stepper("熟练度等级: \(editedLevel)", value: $editedLevel, in: 0...23)
-            
-            Text("标签")
-                .font(.headline)
-            JQ_TagSelectorView(selectedTags: $selectedTags)
-                .frame(height: 150)
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
         }
     }
     
@@ -78,11 +51,16 @@ struct JQ_NoteDetailView: View {
                 Text(note.title)
                     .font(.title)
                 Spacer()
-                Text("Level \(note.level)")
+                Button(action: checkIn) {
+                    Image(systemName: "checkmark.circle")
+                        .foregroundColor(.blue)
+                        .imageScale(.large)
+                }
+                Text(note.levelText)
                     .font(.headline)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(levelColor(for: note.level))
+                    .background(note.levelColor)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
@@ -94,7 +72,14 @@ struct JQ_NoteDetailView: View {
             
             HStack {
                 Image(systemName: "calendar")
-                Text("创建时间: \(note.creationDate, style: .date)")
+                Text("创建时间: \(formattedDate(note.creationDate))")
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+            
+            HStack {
+                Image(systemName: "checkmark.circle")
+                Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
             }
             .font(.caption)
             .foregroundColor(.secondary)
@@ -124,6 +109,34 @@ struct JQ_NoteDetailView: View {
         }
     }
     
+    private var editingView: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            TextField("标题", text: $editedTitle)
+                .font(.title)
+            
+            TextEditor(text: $editedContent)
+                .frame(minHeight: 200)
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            
+            Picker("熟练度", selection: $editedLevel) {
+                Text("初学").tag(0)
+                Text("了解").tag(1)
+                Text("熟练").tag(2)
+                Text("精通").tag(3)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            
+            Text("标签")
+                .font(.headline)
+            JQ_TagSelectorView(selectedTags: $selectedTags)
+                .frame(height: 150)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+        }
+    }
+    
     private func saveChanges() {
         note.title = editedTitle
         note.content = editedContent
@@ -145,11 +158,13 @@ struct JQ_NoteDetailView: View {
     
     private func checkIn() {
         note.studyCount += 1
+        note.lastCheckInDate = Date()
     }
     
-    private func levelColor(for level: Int) -> Color {
-        let hue = Double(level) / 23.0 * 0.3 // 0.3 is the hue for green
-        return Color(hue: hue, saturation: 0.8, brightness: 0.8)
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return formatter.string(from: date)
     }
 }
 

@@ -5,7 +5,6 @@ struct JQ_NoteContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var notes: [JQ_Note]
     @State private var showingAddNote = false
-    @State private var showingTagManagement = false
     
     var body: some View {
         NavigationView {
@@ -37,17 +36,11 @@ struct JQ_NoteContentView: View {
                         Button(action: { showingAddNote = true }) {
                             Image(systemName: "plus")
                         }
-                        Button(action: { showingTagManagement = true }) {
-                            Image(systemName: "tag")
-                        }
                     }
                 }
             }
             .sheet(isPresented: $showingAddNote) {
                 JQ_AddNoteView()
-            }
-            .sheet(isPresented: $showingTagManagement) {
-                JQ_TagManagementView()
             }
         }
     }

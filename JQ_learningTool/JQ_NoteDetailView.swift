@@ -52,7 +52,15 @@ struct JQ_NoteDetailView: View {
                 Text("创建时间: \(note.creationDate, style: .date)")
                 
                 Section(header: Text("标签")) {
-                    Text(note.tags.map { $0.name }.joined(separator: ", "))
+                    ForEach(note.tags) { tag in
+                        HStack {
+                            Text(tag.name)
+                            Spacer()
+                            Circle()
+                                .fill(tag.uiColor)
+                                .frame(width: 20, height: 20)
+                        }
+                    }
                 }
             }
         }

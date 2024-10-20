@@ -82,7 +82,13 @@ struct TagToggle: View {
             get: { isSelected },
             set: { action($0) }
         )) {
-            Text(tag.name)
+            HStack {
+                Text(tag.name)
+                Spacer()
+                Circle()
+                    .fill(tag.uiColor)
+                    .frame(width: 20, height: 20)
+            }
         }
     }
 }

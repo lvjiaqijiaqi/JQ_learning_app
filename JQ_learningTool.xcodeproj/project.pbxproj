@@ -8,17 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		AB4FDD3F2CBEBD3B00922B9F /* JQ_learningToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD3E2CBEBD3B00922B9F /* JQ_learningToolApp.swift */; };
-		AB4FDD412CBEBD3B00922B9F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD402CBEBD3B00922B9F /* ContentView.swift */; };
 		AB4FDD432CBEBD4000922B9F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB4FDD422CBEBD4000922B9F /* Assets.xcassets */; };
 		AB4FDD462CBEBD4000922B9F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB4FDD452CBEBD4000922B9F /* Preview Assets.xcassets */; };
+		AB4FDD4D2CBEBE7100922B9F /* JQ_AddNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD4C2CBEBE7100922B9F /* JQ_AddNoteView.swift */; };
+		AB4FDD512CBEBE7900922B9F /* JQ_Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD502CBEBE7900922B9F /* JQ_Note.swift */; };
+		AB4FDD532CBEBE7C00922B9F /* JQ_NoteDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD522CBEBE7C00922B9F /* JQ_NoteDetailView.swift */; };
+		AB4FDD552CBEBF3C00922B9F /* JQ_ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD542CBEBF3C00922B9F /* JQ_ContentView.swift */; };
+		AB4FDD572CBEC4B500922B9F /* JQ_TagManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD562CBEC4B500922B9F /* JQ_TagManagementView.swift */; };
+		AB4FDD592CC4EF2A00922B9F /* JQ_NoteContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD582CC4EF2900922B9F /* JQ_NoteContentView.swift */; };
+		AB4FDD5B2CC4EF3200922B9F /* JQ_ConfigureContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AB4FDD3B2CBEBD3B00922B9F /* JQ_learningTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JQ_learningTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB4FDD3E2CBEBD3B00922B9F /* JQ_learningToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JQ_learningToolApp.swift; sourceTree = "<group>"; };
-		AB4FDD402CBEBD3B00922B9F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AB4FDD422CBEBD4000922B9F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB4FDD452CBEBD4000922B9F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AB4FDD4C2CBEBE7100922B9F /* JQ_AddNoteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_AddNoteView.swift; sourceTree = "<group>"; };
+		AB4FDD502CBEBE7900922B9F /* JQ_Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_Note.swift; sourceTree = "<group>"; };
+		AB4FDD522CBEBE7C00922B9F /* JQ_NoteDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_NoteDetailView.swift; sourceTree = "<group>"; };
+		AB4FDD542CBEBF3C00922B9F /* JQ_ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_ContentView.swift; sourceTree = "<group>"; };
+		AB4FDD562CBEC4B500922B9F /* JQ_TagManagementView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_TagManagementView.swift; sourceTree = "<group>"; };
+		AB4FDD582CC4EF2900922B9F /* JQ_NoteContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_NoteContentView.swift; sourceTree = "<group>"; };
+		AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_ConfigureContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +63,14 @@
 		AB4FDD3D2CBEBD3B00922B9F /* JQ_learningTool */ = {
 			isa = PBXGroup;
 			children = (
+				AB4FDD4C2CBEBE7100922B9F /* JQ_AddNoteView.swift */,
+				AB4FDD502CBEBE7900922B9F /* JQ_Note.swift */,
+				AB4FDD542CBEBF3C00922B9F /* JQ_ContentView.swift */,
+				AB4FDD582CC4EF2900922B9F /* JQ_NoteContentView.swift */,
+				AB4FDD562CBEC4B500922B9F /* JQ_TagManagementView.swift */,
+				AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */,
 				AB4FDD3E2CBEBD3B00922B9F /* JQ_learningToolApp.swift */,
-				AB4FDD402CBEBD3B00922B9F /* ContentView.swift */,
+				AB4FDD522CBEBE7C00922B9F /* JQ_NoteDetailView.swift */,
 				AB4FDD422CBEBD4000922B9F /* Assets.xcassets */,
 				AB4FDD442CBEBD4000922B9F /* Preview Content */,
 			);
@@ -137,8 +155,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB4FDD412CBEBD3B00922B9F /* ContentView.swift in Sources */,
+				AB4FDD592CC4EF2A00922B9F /* JQ_NoteContentView.swift in Sources */,
 				AB4FDD3F2CBEBD3B00922B9F /* JQ_learningToolApp.swift in Sources */,
+				AB4FDD5B2CC4EF3200922B9F /* JQ_ConfigureContentView.swift in Sources */,
+				AB4FDD552CBEBF3C00922B9F /* JQ_ContentView.swift in Sources */,
+				AB4FDD532CBEBE7C00922B9F /* JQ_NoteDetailView.swift in Sources */,
+				AB4FDD572CBEC4B500922B9F /* JQ_TagManagementView.swift in Sources */,
+				AB4FDD512CBEBE7900922B9F /* JQ_Note.swift in Sources */,
+				AB4FDD4D2CBEBE7100922B9F /* JQ_AddNoteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

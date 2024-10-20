@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct JQ_learningToolApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            JQ_ContentView()
         }
+        .modelContainer(for: JQ_Note.self)
     }
 }

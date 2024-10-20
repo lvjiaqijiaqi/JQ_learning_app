@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import NaturalLanguage
 
 struct JQ_NoteDetailView: View {
     @Environment(\.modelContext) private var modelContext
@@ -14,6 +15,9 @@ struct JQ_NoteDetailView: View {
     @State private var checkInAlertMessage = ""
     @State private var isPlaying = false
     @State private var newComment = ""
+    @State private var translatedContent: String?
+    @State private var isTranslating = false
+    @State private var translationError: String?
     
     private let speechSynthesizer = JQ_SpeechSynthesizer()
     
@@ -61,73 +65,107 @@ struct JQ_NoteDetailView: View {
     }
     
     private var displayView: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(note.title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    HStack {
+                        Text(note.levelText)
+                            .font(.subheadline)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(note.levelColor)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        Spacer()
+                        Button(action: attemptCheckIn) {
+                            Label("打卡", systemImage: "checkmark.circle")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button(action: toggleSpeech) {
+                            Label(isPlaying ? "停止" : "播放", systemImage: isPlaying ? "stop.circle" : "play.circle")
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                }
+            }
+            
+            Text(note.content)
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            
+            if let translated = translatedContent {
+                Text(translated)
+                    .padding(8)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(8)
+            }
+            
+            if let error = translationError {
+                Text(error)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
+            
+            Button(action: translateContent) {
+                if isTranslating {
+                    ProgressView()
+                } else {
+                    Text(translatedContent == nil ? "翻译成中文" : "重新翻译")
+                }
+            }
+            .disabled(isTranslating)
+            
+            VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(note.title)
-                            .font(.title)
-                            .fontWeight(.bold)
-                        HStack {
-                            Text(note.levelText)
-                                .font(.subheadline)
+                    Image(systemName: "calendar")
+                    Text("创建时间: \(formattedDate(note.creationDate))")
+                }
+                HStack {
+                    Image(systemName: "checkmark.circle")
+                    Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
+                }
+                HStack {
+                    Image(systemName: "book.fill")
+                    Text("学习次数: \(note.studyCount)")
+                }
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+            
+            if !note.tags.isEmpty {
+                Text("标签")
+                    .font(.headline)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(note.tags) { tag in
+                            Text(tag.name)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(note.levelColor)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                            Spacer()
-                            Button(action: attemptCheckIn) {
-                                Label("打卡", systemImage: "checkmark.circle")
-                            }
-                            .buttonStyle(.borderedProminent)
-                            Button(action: toggleSpeech) {
-                                Label(isPlaying ? "停止" : "播放", systemImage: isPlaying ? "stop.circle" : "play.circle")
-                            }
-                            .buttonStyle(.bordered)
-                        }
-                    }
-                }
-                
-                Text(note.content)
-                    .padding(8)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Image(systemName: "calendar")
-                        Text("创建时间: \(formattedDate(note.creationDate))")
-                    }
-                    HStack {
-                        Image(systemName: "checkmark.circle")
-                        Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
-                    }
-                    HStack {
-                        Image(systemName: "book.fill")
-                        Text("学习次数: \(note.studyCount)")
-                    }
-                }
-                .font(.caption)
-                .foregroundColor(.secondary)
-                
-                if !note.tags.isEmpty {
-                    Text("标签")
-                        .font(.headline)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(note.tags) { tag in
-                                Text(tag.name)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(tag.uiColor.opacity(0.2))
-                                    .cornerRadius(4)
-                            }
+                                .background(tag.uiColor.opacity(0.2))
+                                .cornerRadius(4)
                         }
                     }
                 }
             }
-            .padding()
+        }
+        .onReceive(speechSynthesizer.$isFinishedSpeaking) { finished in
+            if finished {
+                isPlaying = false
+            }
+        }
+    }
+    
+    private func translateContent() {
+        Task {
+            let translatedText = await JQ_TranslationService.translate(note.content, from: "auto", to: "zh-Hans")
+            await MainActor.run {
+                self.translatedContent = translatedText
+                self.isTranslating = false
+            }
         }
     }
     

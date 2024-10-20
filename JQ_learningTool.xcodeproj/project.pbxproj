@@ -19,6 +19,8 @@
 		AB4FDD5B2CC4EF3200922B9F /* JQ_ConfigureContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */; };
 		AB4FDD5D2CC4F1EA00922B9F /* JQ_TagSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5C2CC4F1EA00922B9F /* JQ_TagSelectorView.swift */; };
 		AB4FDD5F2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5E2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift */; };
+		AB4FDD612CC549EB00922B9F /* JQ_TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD602CC549EB00922B9F /* JQ_TranslationService.swift */; };
+		AB4FDD642CC54B0100922B9F /* NaturalLanguage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB4FDD632CC54B0000922B9F /* NaturalLanguage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_ConfigureContentView.swift; sourceTree = "<group>"; };
 		AB4FDD5C2CC4F1EA00922B9F /* JQ_TagSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_TagSelectorView.swift; sourceTree = "<group>"; };
 		AB4FDD5E2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_SpeechSynthesizer.swift; sourceTree = "<group>"; };
+		AB4FDD602CC549EB00922B9F /* JQ_TranslationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_TranslationService.swift; sourceTree = "<group>"; };
+		AB4FDD632CC54B0000922B9F /* NaturalLanguage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NaturalLanguage.framework; path = System/Library/Frameworks/NaturalLanguage.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB4FDD642CC54B0100922B9F /* NaturalLanguage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +58,7 @@
 			children = (
 				AB4FDD3D2CBEBD3B00922B9F /* JQ_learningTool */,
 				AB4FDD3C2CBEBD3B00922B9F /* Products */,
+				AB4FDD622CC54B0000922B9F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +77,7 @@
 				AB4FDD502CBEBE7900922B9F /* JQ_Note.swift */,
 				AB4FDD542CBEBF3C00922B9F /* JQ_ContentView.swift */,
 				AB4FDD582CC4EF2900922B9F /* JQ_NoteContentView.swift */,
+				AB4FDD602CC549EB00922B9F /* JQ_TranslationService.swift */,
 				AB4FDD5C2CC4F1EA00922B9F /* JQ_TagSelectorView.swift */,
 				AB4FDD562CBEC4B500922B9F /* JQ_TagManagementView.swift */,
 				AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */,
@@ -89,6 +96,14 @@
 				AB4FDD452CBEBD4000922B9F /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		AB4FDD622CC54B0000922B9F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB4FDD632CC54B0000922B9F /* NaturalLanguage.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,6 +179,7 @@
 				AB4FDD592CC4EF2A00922B9F /* JQ_NoteContentView.swift in Sources */,
 				AB4FDD5D2CC4F1EA00922B9F /* JQ_TagSelectorView.swift in Sources */,
 				AB4FDD3F2CBEBD3B00922B9F /* JQ_learningToolApp.swift in Sources */,
+				AB4FDD612CC549EB00922B9F /* JQ_TranslationService.swift in Sources */,
 				AB4FDD5B2CC4EF3200922B9F /* JQ_ConfigureContentView.swift in Sources */,
 				AB4FDD552CBEBF3C00922B9F /* JQ_ContentView.swift in Sources */,
 				AB4FDD532CBEBE7C00922B9F /* JQ_NoteDetailView.swift in Sources */,
@@ -307,6 +323,8 @@
 				DEVELOPMENT_TEAM = 547ZEB69CW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "私人笔记";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -336,6 +354,8 @@
 				DEVELOPMENT_TEAM = 547ZEB69CW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "私人笔记";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

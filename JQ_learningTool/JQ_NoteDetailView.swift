@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct JQ_NoteDetailView: View {
-    
     @Environment(\.modelContext) private var modelContext
     @Bindable var note: JQ_Note
     
@@ -11,6 +10,8 @@ struct JQ_NoteDetailView: View {
     @State private var editedLevel: Int
     @State private var selectedTags: Set<JQ_Tag>
     @State private var isEditing = false
+    @State private var showingCheckInAlert = false
+    @State private var checkInAlertMessage = ""
     
     init(note: JQ_Note) {
         self.note = note
@@ -45,27 +46,34 @@ struct JQ_NoteDetailView: View {
                 }
             }
         }
+        .alert(isPresented: $showingCheckInAlert) {
+            Alert(title: Text("打卡提醒"), message: Text(checkInAlertMessage), dismissButton: .default(Text("确定")))
+        }
     }
     
     private var displayView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                    Text(note.title)
-                        .font(.title)
-                    Spacer()
-                    Button(action: checkIn) {
-                        Image(systemName: "checkmark.circle")
-                            .foregroundColor(.blue)
-                            .imageScale(.large)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(note.title)
+                            .font(.title)
+                            .fontWeight(.bold)
+                        HStack {
+                            Text(note.levelText)
+                                .font(.subheadline)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(note.levelColor)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            Spacer()
+                            Button(action: attemptCheckIn) {
+                                Label("打卡", systemImage: "checkmark.circle")
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
                     }
-                    Text(note.levelText)
-                        .font(.headline)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(note.levelColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
                 }
                 
                 Text(note.content)
@@ -73,23 +81,19 @@ struct JQ_NoteDetailView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                 
-                HStack {
-                    Image(systemName: "calendar")
-                    Text("创建时间: \(formattedDate(note.creationDate))")
-                }
-                .font(.caption)
-                .foregroundColor(.secondary)
-                
-                HStack {
-                    Image(systemName: "checkmark.circle")
-                    Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
-                }
-                .font(.caption)
-                .foregroundColor(.secondary)
-                
-                HStack {
-                    Image(systemName: "book.fill")
-                    Text("学习次数: \(note.studyCount)")
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text("创建时间: \(formattedDate(note.creationDate))")
+                    }
+                    HStack {
+                        Image(systemName: "checkmark.circle")
+                        Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
+                    }
+                    HStack {
+                        Image(systemName: "book.fill")
+                        Text("学习次数: \(note.studyCount)")
+                    }
                 }
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -153,19 +157,31 @@ struct JQ_NoteDetailView: View {
         note.level = editedLevel
         note.tags = Array(selectedTags)
         
-        // 更新每个标签的 notes 数组
         for tag in selectedTags {
             if !tag.notes.contains(note) {
                 tag.notes.append(note)
             }
         }
         
-        // 从未选中的标签中移除此笔记
         for tag in Set(note.tags).subtracting(selectedTags) {
             tag.notes.removeAll { $0.id == note.id }
         }
         
         isEditing = false
+    }
+    
+    private func attemptCheckIn() {
+        let currentTime = Date()
+        let timeSinceLastCheckIn = currentTime.timeIntervalSince(note.lastCheckInDate)
+        let minimumInterval: TimeInterval = 60 * 60 // 60 minutes in seconds
+        
+        if timeSinceLastCheckIn >= minimumInterval {
+            checkIn()
+        } else {
+            let remainingTime = Int((minimumInterval - timeSinceLastCheckIn) / 60)
+            checkInAlertMessage = "距离上次打卡还不到60分钟，请在\(remainingTime)分钟后再试。"
+            showingCheckInAlert = true
+        }
     }
     
     private func checkIn() {

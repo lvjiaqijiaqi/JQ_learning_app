@@ -31,6 +31,17 @@ extension JQ_Tag: Hashable {
 }
 
 @Model
+final class JQ_Comment {
+    var content: String
+    var date: Date
+    
+    init(content: String) {
+        self.content = content
+        self.date = Date()
+    }
+}
+
+@Model
 final class JQ_Note {
     @Attribute(.unique) var id: String
     var title: String
@@ -40,6 +51,7 @@ final class JQ_Note {
     var lastCheckInDate: Date
     var level: Int
     var studyCount: Int
+    @Relationship var comments: [JQ_Comment]
     
     init(title: String, content: String, level: Int = 0) {
         self.id = UUID().uuidString
@@ -50,6 +62,7 @@ final class JQ_Note {
         self.lastCheckInDate = Date()
         self.level = max(0, min(3, level))
         self.studyCount = 0
+        self.comments = []
     }
     
     var levelText: String {

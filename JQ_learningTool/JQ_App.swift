@@ -7,6 +7,6 @@ struct JQ_App: App {
         WindowGroup {
             JQ_ContentView()
         }
-        .modelContainer(for: [JQ_Note.self, JQ_Tag.self])
+        .modelContainer(for: [JQ_Note.self, JQ_Tag.self, JQ_Comment.self])
     }
 }

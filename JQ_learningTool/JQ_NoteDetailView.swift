@@ -13,6 +13,7 @@ struct JQ_NoteDetailView: View {
     @State private var showingCheckInAlert = false
     @State private var checkInAlertMessage = ""
     @State private var isPlaying = false
+    @State private var newComment = ""
     
     private let speechSynthesizer = JQ_SpeechSynthesizer()
     
@@ -25,12 +26,17 @@ struct JQ_NoteDetailView: View {
     }
     
     var body: some View {
-        Group {
-            if isEditing {
-                editingView
-            } else {
-                displayView
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                if isEditing {
+                    editingView
+                } else {
+                    displayView
+                }
+                
+                commentsSection
             }
+            .padding()
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -158,6 +164,31 @@ struct JQ_NoteDetailView: View {
         }
     }
     
+    private var commentsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("评论")
+                .font(.headline)
+            
+            ForEach(note.comments, id: \.self) { comment in
+                VStack(alignment: .leading) {
+                    Text(comment.content)
+                    Text(formattedDate(comment.date))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.vertical, 4)
+            }
+            
+            HStack {
+                TextField("添加评论", text: $newComment)
+                Button("发送") {
+                    addComment()
+                }
+                .disabled(newComment.isEmpty)
+            }
+        }
+    }
+    
     private func saveChanges() {
         note.title = editedTitle
         note.content = editedContent
@@ -210,6 +241,12 @@ struct JQ_NoteDetailView: View {
             speechSynthesizer.speak(note.content)
             isPlaying = true
         }
+    }
+    
+    private func addComment() {
+        let comment = JQ_Comment(content: newComment)
+        note.comments.append(comment)
+        newComment = ""
     }
 }
 

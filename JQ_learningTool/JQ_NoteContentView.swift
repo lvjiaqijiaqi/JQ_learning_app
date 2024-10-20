@@ -83,21 +83,30 @@ struct JQ_NoteContentView: View {
                 }
             }
             HStack {
-                Image(systemName: "calendar")
-                    .foregroundColor(.secondary)
-                Text(formattedDate(note.creationDate))
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text("创建: \(formattedDate(note.creationDate))")
+                    }
+                    HStack {
+                        Image(systemName: "checkmark.circle")
+                        Text("打卡: \(formattedDate(note.lastCheckInDate))")
+                    }
+                }
                 Spacer()
-                Image(systemName: "book.fill")
-                    .foregroundColor(.secondary)
-                Text("学习次数: \(note.studyCount)")
-                Spacer()
-                Text("Level \(note.level)")
-                    .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(levelColor(for: note.level))
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                VStack(alignment: .trailing, spacing: 4) {
+                    HStack {
+                        Image(systemName: "book.fill")
+                        Text("学习次数: \(note.studyCount)")
+                    }
+                    Text(note.levelText)
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(note.levelColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
             }
             .font(.caption)
             .foregroundColor(.secondary)
@@ -111,11 +120,6 @@ struct JQ_NoteContentView: View {
                 modelContext.delete(filteredAndSortedNotes[index])
             }
         }
-    }
-    
-    private func levelColor(for level: Int) -> Color {
-        let hue = Double(level) / 23.0 * 0.3 // 0.3 is the hue for green
-        return Color(hue: hue, saturation: 0.8, brightness: 0.8)
     }
     
     private func formattedDate(_ date: Date) -> String {

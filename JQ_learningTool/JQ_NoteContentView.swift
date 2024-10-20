@@ -11,31 +11,47 @@ struct JQ_NoteContentView: View {
             List {
                 ForEach(notes) { note in
                     NavigationLink(destination: JQ_NoteDetailView(note: note)) {
-                        VStack(alignment: .leading) {
-                            Text(note.title)
-                                .font(.headline)
-                            Text(note.content.prefix(50))
-                                .lineLimit(1)
-                            Text(note.tags.map { $0.name }.joined(separator: ", "))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text(note.creationDate, style: .date)
-                                .font(.caption)
-                            Text(note.status == .complete ? "已完成" : "未完成")
-                                .font(.caption)
-                                .foregroundColor(note.status == .complete ? .green : .blue)
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(note.title)
+                                    .font(.headline)
+                                Text(note.content.prefix(50))
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(2)
+                                HStack {
+                                    ForEach(note.tags) { tag in
+                                        Text(tag.name)
+                                            .font(.caption)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 4)
+                                            .background(tag.uiColor.opacity(0.2))
+                                            .cornerRadius(4)
+                                    }
+                                }
+                                HStack {
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(.secondary)
+                                    Text(note.creationDate, style: .date)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            Spacer()
+                            Image(systemName: note.status == .complete ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(note.status == .complete ? .green : .gray)
                         }
+                        .padding(.vertical, 4)
                     }
                 }
                 .onDelete(perform: deleteNotes)
             }
+            .listStyle(InsetGroupedListStyle())
             .navigationTitle("英语笔记")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack {
-                        Button(action: { showingAddNote = true }) {
-                            Image(systemName: "plus")
-                        }
+                    Button(action: { showingAddNote = true }) {
+                        Image(systemName: "square.and.pencil")
                     }
                 }
             }

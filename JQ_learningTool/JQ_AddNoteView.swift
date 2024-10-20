@@ -7,7 +7,7 @@ struct JQ_AddNoteView: View {
     
     @State private var title = ""
     @State private var content = ""
-    @State private var status: NoteStatus = .uncomplete
+    @State private var level = 0
     @State private var selectedTags: Set<JQ_Tag> = []
     
     var body: some View {
@@ -22,12 +22,8 @@ struct JQ_AddNoteView: View {
                         .frame(minHeight: 200)
                 }
                 
-                Section(header: Text("状态")) {
-                    Picker("状态", selection: $status) {
-                        Text("未完成").tag(NoteStatus.uncomplete)
-                        Text("已完成").tag(NoteStatus.complete)
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
+                Section(header: Text("熟练度等级")) {
+                    Stepper("Level: \(level)", value: $level, in: 0...3)
                 }
                 
                 Section(header: Text("标签")) {
@@ -51,7 +47,7 @@ struct JQ_AddNoteView: View {
     }
     
     private func saveNote() {
-        let newNote = JQ_Note(title: title, content: content, status: status)
+        let newNote = JQ_Note(title: title, content: content, level: level)
         newNote.tags = Array(selectedTags)
         modelContext.insert(newNote)
         

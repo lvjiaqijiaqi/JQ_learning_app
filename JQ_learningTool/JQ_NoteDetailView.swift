@@ -7,7 +7,7 @@ struct JQ_NoteDetailView: View {
     
     @State private var editedTitle: String
     @State private var editedContent: String
-    @State private var editedStatus: NoteStatus
+    @State private var editedLevel: Int
     @State private var selectedTags: Set<JQ_Tag>
     @State private var isEditing = false
     
@@ -15,7 +15,7 @@ struct JQ_NoteDetailView: View {
         self.note = note
         _editedTitle = State(initialValue: note.title)
         _editedContent = State(initialValue: note.content)
-        _editedStatus = State(initialValue: note.status)
+        _editedLevel = State(initialValue: note.level)
         _selectedTags = State(initialValue: Set(note.tags))
     }
     
@@ -33,13 +33,18 @@ struct JQ_NoteDetailView: View {
         .navigationTitle(isEditing ? "编辑笔记" : note.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    if isEditing {
-                        saveChanges()
+                HStack {
+                    Button(action: checkIn) {
+                        Image(systemName: "checkmark.circle")
                     }
-                    isEditing.toggle()
-                }) {
-                    Text(isEditing ? "保存" : "编辑")
+                    Button(action: {
+                        if isEditing {
+                            saveChanges()
+                        }
+                        isEditing.toggle()
+                    }) {
+                        Text(isEditing ? "保存" : "编辑")
+                    }
                 }
             }
         }
@@ -56,11 +61,7 @@ struct JQ_NoteDetailView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(8)
             
-            Picker("状态", selection: $editedStatus) {
-                Text("未完成").tag(NoteStatus.uncomplete)
-                Text("已完成").tag(NoteStatus.complete)
-            }
-            .pickerStyle(SegmentedPickerStyle())
+            Stepper("熟练度等级: \(editedLevel)", value: $editedLevel, in: 0...23)
             
             Text("标签")
                 .font(.headline)
@@ -77,8 +78,13 @@ struct JQ_NoteDetailView: View {
                 Text(note.title)
                     .font(.title)
                 Spacer()
-                Image(systemName: note.status == .complete ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(note.status == .complete ? .green : .gray)
+                Text("Level \(note.level)")
+                    .font(.headline)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(levelColor(for: note.level))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
             }
             
             Text(note.content)
@@ -89,6 +95,13 @@ struct JQ_NoteDetailView: View {
             HStack {
                 Image(systemName: "calendar")
                 Text("创建时间: \(note.creationDate, style: .date)")
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+            
+            HStack {
+                Image(systemName: "book.fill")
+                Text("学习次数: \(note.studyCount)")
             }
             .font(.caption)
             .foregroundColor(.secondary)
@@ -114,7 +127,7 @@ struct JQ_NoteDetailView: View {
     private func saveChanges() {
         note.title = editedTitle
         note.content = editedContent
-        note.status = editedStatus
+        note.level = editedLevel
         note.tags = Array(selectedTags)
         
         // 更新每个标签的 notes 数组
@@ -128,6 +141,15 @@ struct JQ_NoteDetailView: View {
         for tag in Set(note.tags).subtracting(selectedTags) {
             tag.notes.removeAll { $0.id == note.id }
         }
+    }
+    
+    private func checkIn() {
+        note.studyCount += 1
+    }
+    
+    private func levelColor(for level: Int) -> Color {
+        let hue = Double(level) / 23.0 * 0.3 // 0.3 is the hue for green
+        return Color(hue: hue, saturation: 0.8, brightness: 0.8)
     }
 }
 

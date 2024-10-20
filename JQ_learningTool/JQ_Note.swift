@@ -2,11 +2,6 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-enum NoteStatus: String, Codable {
-    case uncomplete
-    case complete
-}
-
 @Model
 final class JQ_Tag {
     var name: String
@@ -41,14 +36,16 @@ final class JQ_Note {
     var content: String
     @Relationship(inverse: \JQ_Tag.notes) var tags: [JQ_Tag]
     var creationDate: Date
-    var status: NoteStatus
+    var level: Int // 熟练度等级，范围 0-23
+    var studyCount: Int
     
-    init(title: String, content: String, status: NoteStatus = .uncomplete) {
+    init(title: String, content: String, level: Int = 0) {
         self.title = title
         self.content = content
         self.tags = []
         self.creationDate = Date()
-        self.status = status
+        self.level = max(0, min(3, level)) // 确保 level 在 0-23 范围内
+        self.studyCount = 0
     }
 }
 

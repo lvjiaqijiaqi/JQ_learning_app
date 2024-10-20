@@ -12,6 +12,9 @@ struct JQ_NoteDetailView: View {
     @State private var isEditing = false
     @State private var showingCheckInAlert = false
     @State private var checkInAlertMessage = ""
+    @State private var isPlaying = false
+    
+    private let speechSynthesizer = JQ_SpeechSynthesizer()
     
     init(note: JQ_Note) {
         self.note = note
@@ -72,6 +75,10 @@ struct JQ_NoteDetailView: View {
                                 Label("打卡", systemImage: "checkmark.circle")
                             }
                             .buttonStyle(.borderedProminent)
+                            Button(action: toggleSpeech) {
+                                Label(isPlaying ? "停止" : "播放", systemImage: isPlaying ? "stop.circle" : "play.circle")
+                            }
+                            .buttonStyle(.bordered)
                         }
                     }
                 }
@@ -193,6 +200,16 @@ struct JQ_NoteDetailView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         return formatter.string(from: date)
+    }
+    
+    private func toggleSpeech() {
+        if isPlaying {
+            speechSynthesizer.stopSpeaking()
+            isPlaying = false
+        } else {
+            speechSynthesizer.speak(note.content)
+            isPlaying = true
+        }
     }
 }
 

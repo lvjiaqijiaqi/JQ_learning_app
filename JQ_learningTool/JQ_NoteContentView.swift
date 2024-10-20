@@ -66,18 +66,8 @@ struct JQ_NoteContentView: View {
     
     private func noteRow(note: JQ_Note) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(note.title)
-                    .font(.headline)
-                Spacer()
-                Text(note.levelText)
-                    .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(note.levelColor)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
+            Text(note.title)
+                .font(.headline)
             Text(note.content.prefix(50))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -94,15 +84,38 @@ struct JQ_NoteContentView: View {
             }
             HStack {
                 Image(systemName: "calendar")
-                Text("创建: \(formattedDate(note.creationDate))")
+                    .foregroundColor(.secondary)
+                Text(formattedDate(note.creationDate))
                 Spacer()
-                Image(systemName: "checkmark.circle")
-                Text("最近打卡: \(formattedDate(note.lastCheckInDate))")
+                Image(systemName: "book.fill")
+                    .foregroundColor(.secondary)
+                Text("学习次数: \(note.studyCount)")
+                Spacer()
+                Text("Level \(note.level)")
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(levelColor(for: note.level))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
             }
             .font(.caption)
             .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
+    }
+    
+    private func deleteNotes(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(filteredAndSortedNotes[index])
+            }
+        }
+    }
+    
+    private func levelColor(for level: Int) -> Color {
+        let hue = Double(level) / 23.0 * 0.3 // 0.3 is the hue for green
+        return Color(hue: hue, saturation: 0.8, brightness: 0.8)
     }
     
     private func formattedDate(_ date: Date) -> String {
@@ -138,18 +151,5 @@ struct JQ_NoteContentView: View {
                 showingFilterSort = false
             })
         }
-    }
-    
-    private func deleteNotes(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(filteredAndSortedNotes[index])
-            }
-        }
-    }
-    
-    private func levelColor(for level: Int) -> Color {
-        let hue = Double(level) / 23.0 * 0.3 // 0.3 is the hue for green
-        return Color(hue: hue, saturation: 0.8, brightness: 0.8)
     }
 }

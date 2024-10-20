@@ -18,6 +18,7 @@
 		AB4FDD592CC4EF2A00922B9F /* JQ_NoteContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD582CC4EF2900922B9F /* JQ_NoteContentView.swift */; };
 		AB4FDD5B2CC4EF3200922B9F /* JQ_ConfigureContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */; };
 		AB4FDD5D2CC4F1EA00922B9F /* JQ_TagSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5C2CC4F1EA00922B9F /* JQ_TagSelectorView.swift */; };
+		AB4FDD5F2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FDD5E2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		AB4FDD582CC4EF2900922B9F /* JQ_NoteContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_NoteContentView.swift; sourceTree = "<group>"; };
 		AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_ConfigureContentView.swift; sourceTree = "<group>"; };
 		AB4FDD5C2CC4F1EA00922B9F /* JQ_TagSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_TagSelectorView.swift; sourceTree = "<group>"; };
+		AB4FDD5E2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JQ_SpeechSynthesizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				AB4FDD5C2CC4F1EA00922B9F /* JQ_TagSelectorView.swift */,
 				AB4FDD562CBEC4B500922B9F /* JQ_TagManagementView.swift */,
 				AB4FDD5A2CC4EF3200922B9F /* JQ_ConfigureContentView.swift */,
+				AB4FDD5E2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift */,
 				AB4FDD3E2CBEBD3B00922B9F /* JQ_learningToolApp.swift */,
 				AB4FDD522CBEBE7C00922B9F /* JQ_NoteDetailView.swift */,
 				AB4FDD422CBEBD4000922B9F /* Assets.xcassets */,
@@ -165,6 +168,7 @@
 				AB4FDD552CBEBF3C00922B9F /* JQ_ContentView.swift in Sources */,
 				AB4FDD532CBEBE7C00922B9F /* JQ_NoteDetailView.swift in Sources */,
 				AB4FDD572CBEC4B500922B9F /* JQ_TagManagementView.swift in Sources */,
+				AB4FDD5F2CC5357B00922B9F /* JQ_SpeechSynthesizer.swift in Sources */,
 				AB4FDD512CBEBE7900922B9F /* JQ_Note.swift in Sources */,
 				AB4FDD4D2CBEBE7100922B9F /* JQ_AddNoteView.swift in Sources */,
 			);

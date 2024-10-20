@@ -32,21 +32,23 @@ extension JQ_Tag: Hashable {
 
 @Model
 final class JQ_Note {
+    @Attribute(.unique) var id: String
     var title: String
     var content: String
     @Relationship(inverse: \JQ_Tag.notes) var tags: [JQ_Tag]
     var creationDate: Date
-    var lastCheckInDate: Date // 新增字段
-    var level: Int // 熟练度等级，范围 0-23
+    var lastCheckInDate: Date
+    var level: Int
     var studyCount: Int
     
     init(title: String, content: String, level: Int = 0) {
+        self.id = UUID().uuidString
         self.title = title
         self.content = content
         self.tags = []
         self.creationDate = Date()
-        self.lastCheckInDate = Date() // 初始化为创建时间
-        self.level = max(0, min(3, level)) // 确保 level 在 0-23 范围内
+        self.lastCheckInDate = Date()
+        self.level = max(0, min(3, level))
         self.studyCount = 0
     }
     

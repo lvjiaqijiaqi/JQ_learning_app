@@ -9,6 +9,7 @@ struct JQ_TagManagementView: View {
     @State private var editingTag: JQ_Tag?
     @State private var showingColorPicker = false
     @State private var showingAddTag = false
+    @State private var editMode: EditMode = .inactive
     
     var body: some View {
         List {
@@ -21,14 +22,22 @@ struct JQ_TagManagementView: View {
         .navigationTitle("管理标签")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { showingAddTag = true }) {
-                    Image(systemName: "plus")
+                HStack {
+                    Button(action: {
+                        withAnimation {
+                            editMode = editMode == .active ? .inactive : .active
+                        }
+                    }) {
+                        Image(systemName: editMode == .active ? "checkmark" : "pencil")
+                    }
+                    
+                    Button(action: { showingAddTag = true }) {
+                        Image(systemName: "plus")
+                    }
                 }
             }
-            ToolbarItem(placement: .navigationBarLeading) {
-                EditButton()
-            }
         }
+        .environment(\.editMode, $editMode)
         .sheet(isPresented: $showingAddTag) {
             AddTagView(modelContext: modelContext, showingAddTag: $showingAddTag)
         }

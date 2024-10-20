@@ -20,40 +20,15 @@ struct JQ_NoteDetailView: View {
     }
     
     var body: some View {
-        Form {
-            if isEditing {
-                TextField("标题", text: $editedTitle)
-                TextEditor(text: $editedContent)
-                    .frame(minHeight: 200)
-                
-                Picker("状态", selection: $editedStatus) {
-                    Text("未完成").tag(NoteStatus.uncomplete)
-                    Text("已完成").tag(NoteStatus.complete)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                
-                Section(header: Text("标签")) {
-                    JQ_TagSelectorView(selectedTags: $selectedTags)
-                }
-            } else {
-                Text(note.title)
-                    .font(.headline)
-                Text(note.content)
-                Text("状态: \(note.status == .complete ? "已完成" : "未完成")")
-                Text("创建时间: \(note.creationDate, style: .date)")
-                
-                Section(header: Text("标签")) {
-                    ForEach(note.tags) { tag in
-                        HStack {
-                            Text(tag.name)
-                            Spacer()
-                            Circle()
-                                .fill(tag.uiColor)
-                                .frame(width: 20, height: 20)
-                        }
-                    }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                if isEditing {
+                    editingView
+                } else {
+                    displayView
                 }
             }
+            .padding()
         }
         .navigationTitle(isEditing ? "编辑笔记" : note.title)
         .toolbar {
@@ -65,6 +40,72 @@ struct JQ_NoteDetailView: View {
                     isEditing.toggle()
                 }) {
                     Text(isEditing ? "保存" : "编辑")
+                }
+            }
+        }
+    }
+    
+    private var editingView: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            TextField("标题", text: $editedTitle)
+                .font(.title)
+            
+            TextEditor(text: $editedContent)
+                .frame(minHeight: 200)
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            
+            Picker("状态", selection: $editedStatus) {
+                Text("未完成").tag(NoteStatus.uncomplete)
+                Text("已完成").tag(NoteStatus.complete)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            
+            Text("标签")
+                .font(.headline)
+            JQ_TagSelectorView(selectedTags: $selectedTags)
+                .frame(height: 150)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+        }
+    }
+    
+    private var displayView: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                Text(note.title)
+                    .font(.title)
+                Spacer()
+                Image(systemName: note.status == .complete ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(note.status == .complete ? .green : .gray)
+            }
+            
+            Text(note.content)
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            
+            HStack {
+                Image(systemName: "calendar")
+                Text("创建时间: \(note.creationDate, style: .date)")
+            }
+            .font(.caption)
+            .foregroundColor(.secondary)
+            
+            if !note.tags.isEmpty {
+                Text("标签")
+                    .font(.headline)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(note.tags) { tag in
+                            Text(tag.name)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(tag.uiColor.opacity(0.2))
+                                .cornerRadius(4)
+                        }
+                    }
                 }
             }
         }

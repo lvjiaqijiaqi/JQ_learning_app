@@ -4,7 +4,6 @@ import SwiftData
 struct JQ_NoteDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var note: JQ_Note
-    @Query private var allTags: [JQ_Tag]
     
     @State private var editedTitle: String
     @State private var editedContent: String
@@ -34,15 +33,7 @@ struct JQ_NoteDetailView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 
                 Section(header: Text("标签")) {
-                    ForEach(allTags) { tag in
-                        TagToggle(tag: tag, isSelected: selectedTags.contains(tag)) { isOn in
-                            if isOn {
-                                selectedTags.insert(tag)
-                            } else {
-                                selectedTags.remove(tag)
-                            }
-                        }
-                    }
+                    JQ_TagSelectorView(selectedTags: $selectedTags)
                 }
             } else {
                 Text(note.title)
@@ -85,14 +76,16 @@ struct JQ_NoteDetailView: View {
         note.status = editedStatus
         note.tags = Array(selectedTags)
         
-        for tag in allTags {
-            if selectedTags.contains(tag) {
-                if !tag.notes.contains(note) {
-                    tag.notes.append(note)
-                }
-            } else {
-                tag.notes.removeAll { $0.id == note.id }
+        // 更新每个标签的 notes 数组
+        for tag in selectedTags {
+            if !tag.notes.contains(note) {
+                tag.notes.append(note)
             }
+        }
+        
+        // 从未选中的标签中移除此笔记
+        for tag in Set(note.tags).subtracting(selectedTags) {
+            tag.notes.removeAll { $0.id == note.id }
         }
     }
 }

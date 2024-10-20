@@ -4,7 +4,6 @@ import SwiftData
 struct JQ_AddNoteView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Query private var allTags: [JQ_Tag]
     
     @State private var title = ""
     @State private var content = ""
@@ -32,15 +31,7 @@ struct JQ_AddNoteView: View {
                 }
                 
                 Section(header: Text("标签")) {
-                    ForEach(allTags) { tag in
-                        TagToggle(tag: tag, isSelected: selectedTags.contains(tag)) { isOn in
-                            if isOn {
-                                selectedTags.insert(tag)
-                            } else {
-                                selectedTags.remove(tag)
-                            }
-                        }
-                    }
+                    JQ_TagSelectorView(selectedTags: $selectedTags)
                 }
             }
             .navigationTitle("添加笔记")
@@ -69,26 +60,5 @@ struct JQ_AddNoteView: View {
         }
         
         dismiss()
-    }
-}
-
-struct TagToggle: View {
-    let tag: JQ_Tag
-    let isSelected: Bool
-    let action: (Bool) -> Void
-    
-    var body: some View {
-        Toggle(isOn: Binding(
-            get: { isSelected },
-            set: { action($0) }
-        )) {
-            HStack {
-                Text(tag.name)
-                Spacer()
-                Circle()
-                    .fill(tag.uiColor)
-                    .frame(width: 20, height: 20)
-            }
-        }
     }
 }

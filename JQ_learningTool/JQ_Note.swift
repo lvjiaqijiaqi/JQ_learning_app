@@ -24,6 +24,17 @@ final class JQ_Tag {
     }
 }
 
+extension JQ_Tag: Hashable {
+    static func == (lhs: JQ_Tag, rhs: JQ_Tag) -> Bool {
+        lhs.name == rhs.name && lhs.color == rhs.color
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(color)
+    }
+}
+
 @Model
 final class JQ_Note {
     var title: String
